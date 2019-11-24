@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Repositories</string>
+
+    <string name="image">avatar</string>
+    <string name="lbl_name">Repo Name:</string>
+    <string name="placeholder_name">luhnybin</string>
+    <string name="lbl_description">Repo Description:</string>
+    <string name="placeholder_description">Code quality threshold checking as part of your build</string>
+
+</resources>
