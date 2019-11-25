@@ -121,7 +121,7 @@ class ActivityTest {
         activityRule!!.activity.viewModel.gitRepoUseCase.nukeDB()
 
         activityRule!!.activity.viewModel.formattedList.observeForTesting {
-            if (activityRule!!.activity.viewModel.formattedList.value!!.status == Status.ERROR) {
+            if (activityRule!!.activity.viewModel.formattedList.value!!.status == Status.LOADING) {
                 onView(withId(R.id.progress_bar)).check(matches(withEffectiveVisibility(Visibility.VISIBLE)))
 
             } else {

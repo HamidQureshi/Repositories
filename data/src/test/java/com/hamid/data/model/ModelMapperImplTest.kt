@@ -7,9 +7,9 @@ import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 
-class DBModelMapperImplTest {
+class ModelMapperImplTest {
 
-    private val mapper = DBModelMapperImpl()
+    private val mapper = ModelMapperImpl()
 
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()

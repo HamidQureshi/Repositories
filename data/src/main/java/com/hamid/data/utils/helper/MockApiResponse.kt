@@ -1,7 +1,7 @@
 package com.hamid.data.utils.helper
 
-import com.hamid.data.model.Owner
-import com.hamid.data.model.RemoteApiResponse
+import com.hamid.domain.model.model.Owner
+import com.hamid.domain.model.model.RemoteApiResponse
 
 class MockApiResponse {
     companion object {

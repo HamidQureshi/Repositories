@@ -3,12 +3,12 @@ package com.hamid.data.model
 import com.hamid.domain.model.model.RepoPresentationModel
 import com.hamid.domain.model.model.Response
 import com.hamid.domain.model.model.Status
-import com.hamid.domain.model.repository.RepoModelMapper
+import com.hamid.domain.model.repository.ModelMapper
 
 /**
  * Maps between Room database entity and presentation model.
  */
-class PresentationModelMapperImpl : RepoModelMapper<List<RepoDBModel>, Response> {
+class PresentationModelMapperImpl : ModelMapper<List<RepoDBModel>, Response> {
     override fun fromEntity(from: List<RepoDBModel>) =
         convertResponseForUI(convertModel(from))
 
@@ -32,11 +32,10 @@ class PresentationModelMapperImpl : RepoModelMapper<List<RepoDBModel>, Response>
 
     private fun convertResponseForUI(repoList: List<RepoPresentationModel>): Response {
 
-        val response =
-            Response(Status.SUCCESS, repoList)
+        val response = Response(Status.SUCCESS, repoList)
 
         if (repoList.isEmpty()) {
-            response.status = Status.ERROR
+            response.status = Status.LOADING
         }
 
         return response

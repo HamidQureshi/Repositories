@@ -24,8 +24,8 @@ class PresentationModelMapperImplTest {
 
         val resultEmpty = mapper.fromEntity(emptyList())
 
-        assertEquals(MockResponseForPresentation.responseFailure.status, resultEmpty.status)
-        assertEquals(MockResponseForPresentation.responseFailure.data, resultEmpty.data)
+        assertEquals(MockResponseForPresentation.responseLoading.status, resultEmpty.status)
+        assertEquals(MockResponseForPresentation.responseLoading.data, resultEmpty.data)
 
     }
 

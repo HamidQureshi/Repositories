@@ -49,12 +49,4 @@ class GitRepoUseCaseTest {
             .nukeDB()
     }
 
-    @Test
-    fun clearDisposable() {
-
-        useCase.clearDisposable()
-
-        verify(repo, only())
-            .clearDisposable()
-    }
 }

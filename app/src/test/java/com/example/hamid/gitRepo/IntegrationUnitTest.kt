@@ -6,7 +6,7 @@ import androidx.lifecycle.Observer
 import com.example.hamid.gitRepo.presentation.ui.viewmodel.RepoViewModel
 import com.hamid.data.GitRepoRepositoryImpl
 import com.hamid.data.local.db.RepoDaoImpl
-import com.hamid.data.model.DBModelMapperImpl
+import com.hamid.data.model.ModelMapperImpl
 import com.hamid.data.model.PresentationModelMapperImpl
 import com.hamid.data.remote.APIService
 import com.hamid.data.utils.helper.MockApiResponse
@@ -32,7 +32,7 @@ class IntegrationUnitTest {
 
     private var apiService: APIService = mock()
     private var daoImpl: RepoDaoImpl = mock()
-    private var dbMapper: DBModelMapperImpl = mock()
+    private var dbMapper: ModelMapperImpl = mock()
     private var presentationMapper: PresentationModelMapperImpl = mock()
 
     private lateinit var repoImpl: GitRepoRepositoryImpl

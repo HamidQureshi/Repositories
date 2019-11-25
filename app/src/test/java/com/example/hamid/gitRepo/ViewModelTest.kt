@@ -84,19 +84,13 @@ class ViewModelTest {
 
         `when`(
             repo.getRepoFromDb()
-        ).thenReturn(Flowable.just(MockResponseForPresentation.responseFailure))
+        ).thenReturn(Flowable.just(MockResponseForPresentation.responseLoading))
 
         viewModel.getData()
 
         viewModel.formattedList.observeForTesting {
             Assert.assertTrue(viewModel.formattedList.value!!.status == Status.ERROR)
         }
-    }
-
-    @Test
-    fun clearDisposable_callsClearDisposableFromDomain() {
-        viewModel.onCleared()
-        verify(repo, atLeastOnce()).clearDisposable()
     }
 
     @Test

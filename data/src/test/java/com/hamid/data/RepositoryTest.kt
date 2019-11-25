@@ -2,7 +2,7 @@ package com.hamid.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.hamid.data.local.db.RepoDaoImpl
-import com.hamid.data.model.DBModelMapperImpl
+import com.hamid.data.model.ModelMapperImpl
 import com.hamid.data.model.PresentationModelMapperImpl
 import com.hamid.data.model.RepoDBModel
 import com.hamid.data.remote.APIService
@@ -20,7 +20,6 @@ import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
 import org.junit.After
 import org.junit.Assert.assertEquals
-import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -40,7 +39,7 @@ class RepositoryTest {
     private var apiService: APIService = mock()
     private var daoImpl: RepoDaoImpl =
         mock()
-    private var dbMapper: DBModelMapperImpl = mock()
+    private var dbMapper: ModelMapperImpl = mock()
     private var presentationMapper: PresentationModelMapperImpl = mock()
 
     private lateinit var repoImpl: GitRepoRepositoryImpl
@@ -81,18 +80,12 @@ class RepositoryTest {
 
         verify(apiService, times(1))
             .fetchRepo()
-
-        verify(dbMapper, times(1))
-            .fromEntity(MockApiResponse.repoResponseList)
-
-        verify(daoImpl, times(1))
-            .insertAll(MockDBResponse.repoDBList)
     }
 
     @Test
     fun insertRepoListToDB_insertToDbCall() {
 
-        repoImpl.insertRepoToDB(MockDBResponse.repoDBList)
+        repoImpl.insertRepoToDB(MockApiResponse.repoResponseList)
 
         verify(daoImpl, only())
             .insertAll(MockDBResponse.repoDBList)
@@ -105,24 +98,6 @@ class RepositoryTest {
 
         verify(daoImpl, only())
             .deleteAll()
-    }
-
-
-    @Test
-    fun clearDisposable_clearsDisposable() {
-
-        val disposableSize = repoImpl.getDisposable().size()
-
-        assertTrue(disposableSize == 0)
-
-        repoImpl.getRepoFromServer()
-
-        assertTrue(disposableSize + 1 == repoImpl.getDisposable().size())
-
-        repoImpl.clearDisposable()
-
-        assertTrue(0 == repoImpl.getDisposable().size())
-
     }
 
     @Test
@@ -155,7 +130,7 @@ class RepositoryTest {
 
         `when`(
             presentationMapper.fromEntity(emptyList())
-        ).thenReturn(MockResponseForPresentation.responseFailure)
+        ).thenReturn(MockResponseForPresentation.responseLoading)
 
         `when`(daoImpl.getAllRepo())
             .thenReturn(Flowable.just(expectedValue))

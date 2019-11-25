@@ -6,7 +6,7 @@ import androidx.test.espresso.idling.CountingIdlingResource
 import com.hamid.data.GitRepoRepositoryImpl
 import com.hamid.data.local.db.RepoDaoImpl
 import com.hamid.data.local.db.RepositoryRoomDatabase
-import com.hamid.data.model.DBModelMapperImpl
+import com.hamid.data.model.ModelMapperImpl
 import com.hamid.data.model.PresentationModelMapperImpl
 import com.hamid.data.remote.APIService
 import com.hamid.domain.model.repository.GitRepoRepository
@@ -44,11 +44,11 @@ class DBModule {
 
     @Singleton
     @Provides
-    fun provideDBModelMapper() = DBModelMapperImpl()
+    fun provideDBModelMapper() = ModelMapperImpl()
 
     @Provides
     @Singleton
-    fun provideRepository(@NonNull apiService: APIService, @NonNull daoImpl: RepoDaoImpl, @NonNull dbMapper: DBModelMapperImpl, @NonNull presentationMapper: PresentationModelMapperImpl): GitRepoRepository {
+    fun provideRepository(@NonNull apiService: APIService, @NonNull daoImpl: RepoDaoImpl, @NonNull dbMapper: ModelMapperImpl, @NonNull presentationMapper: PresentationModelMapperImpl): GitRepoRepository {
         return GitRepoRepositoryImpl(
             apiService,
             daoImpl,

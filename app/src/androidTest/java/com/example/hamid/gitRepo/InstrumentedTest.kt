@@ -15,7 +15,7 @@ import com.example.hamid.gitRepo.presentation.ui.viewmodel.RepoViewModel
 import com.hamid.data.GitRepoRepositoryImpl
 import com.hamid.data.local.db.RepoDaoImpl
 import com.hamid.data.local.db.RepositoryRoomDatabase
-import com.hamid.data.model.DBModelMapperImpl
+import com.hamid.data.model.ModelMapperImpl
 import com.hamid.data.model.PresentationModelMapperImpl
 import com.hamid.data.remote.APIService
 import com.hamid.data.utils.EspressoIdlingResource
@@ -34,7 +34,7 @@ class InstrumentedTest {
     private lateinit var apiService: APIService
     private lateinit var db: RepositoryRoomDatabase
     private lateinit var daoImpl: RepoDaoImpl
-    private val dbMapper = DBModelMapperImpl()
+    private val dbMapper = ModelMapperImpl()
     private val presentationMapper = PresentationModelMapperImpl()
     private lateinit var repositoryImpl: GitRepoRepositoryImpl
     private lateinit var gitRepoUseCase: GitRepoUseCase
@@ -98,9 +98,9 @@ class InstrumentedTest {
     }
 
     @Test
-    fun verifyLiveDataHasSuccessResponse() {
+    fun verifyLiveDataHasLoadingResponse() {
         viewModel.formattedList.observeForTesting {
-            Assert.assertTrue(viewModel.formattedList.value!!.status == Status.SUCCESS)
+            Assert.assertTrue(viewModel.formattedList.value!!.status == Status.LOADING)
         }
     }
 

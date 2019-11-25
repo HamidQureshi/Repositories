@@ -6,5 +6,6 @@
     <string name="placeholder_name">luhnybin</string>
     <string name="lbl_description">Repo Description:</string>
     <string name="placeholder_description">Code quality threshold checking as part of your build</string>
+    <string name="placeholder_error">Something Went Wrong!</string>
 
 </resources>

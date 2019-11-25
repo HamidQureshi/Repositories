@@ -1,6 +1,7 @@
 package com.example.hamid.gitRepo.presentation.ui.activity
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -47,11 +48,22 @@ class RepoActivity : AppCompatActivity() {
 
         viewModel.formattedList.observe(this, Observer { repositories ->
 
-            if (repositories.status == Status.SUCCESS) {
-                progress_bar.visibility = View.GONE
-                itemListAdapter.setAdapterList(repositories!!.data)
-            } else {
-                progress_bar.visibility = View.VISIBLE
+            progress_bar.visibility = View.GONE
+
+            when {
+                repositories.status == Status.SUCCESS -> {
+                    itemListAdapter.setAdapterList(repositories!!.data)
+                    progress_bar.visibility = View.GONE
+                    tv_lbl_error.visibility = View.GONE
+                }
+                repositories.status == Status.LOADING -> {
+                    progress_bar.visibility = View.VISIBLE
+                    tv_lbl_error.visibility = View.GONE
+                }
+                else -> {
+                    progress_bar.visibility = View.GONE
+                    tv_lbl_error.visibility = View.VISIBLE
+                }
             }
 
         })

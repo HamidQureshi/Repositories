@@ -24,7 +24,7 @@ class MockResponseForPresentation {
         val repoDBList = listOf(presentationRepo1, presentationRepo2)
 
         val responseSuccess = Response(Status.SUCCESS, repoDBList)
-        val responseFailure = Response(Status.ERROR, emptyList())
+        val responseLoading = Response(Status.LOADING, emptyList())
 
     }
 }
