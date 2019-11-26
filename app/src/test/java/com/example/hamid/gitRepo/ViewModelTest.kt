@@ -4,11 +4,9 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.hamid.gitRepo.presentation.ui.viewmodel.RepoViewModel
-import com.hamid.data.GitRepoRepositoryImpl
 import com.hamid.data.utils.helper.MockResponseForPresentation
 import com.hamid.domain.model.model.Status
 import com.hamid.domain.model.usecases.GitRepoUseCase
-import com.nhaarman.mockitokotlin2.atLeastOnce
 import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.only
 import com.nhaarman.mockitokotlin2.verify
@@ -31,9 +29,7 @@ class ViewModelTest {
     @get:Rule
     val instantExecutorRule = InstantTaskExecutorRule()
 
-    private val repo: GitRepoRepositoryImpl = mock()
-
-    private lateinit var gitRepoUseCase: GitRepoUseCase
+    private var gitRepoUseCase: GitRepoUseCase = mock()
     private lateinit var viewModel: RepoViewModel
 
 
@@ -42,10 +38,9 @@ class ViewModelTest {
     fun setUp() {
 
         `when`(
-            repo.getRepoFromDb()
+            gitRepoUseCase.getRepoFromDb()
         ).thenReturn(Flowable.just(MockResponseForPresentation.responseSuccess))
 
-        gitRepoUseCase = GitRepoUseCase(repo)
         viewModel = RepoViewModel(gitRepoUseCase)
 
     }
@@ -59,7 +54,7 @@ class ViewModelTest {
     @Test
     fun getData_getDataFromDomainCalled() {
         viewModel.getData()
-        verify(repo, only()).getRepoFromDb()
+        verify(gitRepoUseCase, only()).getRepoFromDb()
     }
 
     @Test
@@ -83,7 +78,7 @@ class ViewModelTest {
     fun verifyLiveData_StatusError() {
 
         `when`(
-            repo.getRepoFromDb()
+            gitRepoUseCase.getRepoFromDb()
         ).thenReturn(Flowable.just(MockResponseForPresentation.responseLoading))
 
         viewModel.getData()
