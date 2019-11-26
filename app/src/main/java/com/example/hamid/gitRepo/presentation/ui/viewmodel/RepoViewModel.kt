@@ -47,7 +47,7 @@ constructor(
 
     }
 
-    private fun getDataFromServer(){
+    fun getDataFromServer(){
         EspressoIdlingResource.increment()
         compositeDisposable.add(
             gitRepoUseCase.getRepoFromServer()

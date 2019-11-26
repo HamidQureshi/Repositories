@@ -4,13 +4,13 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import com.example.hamid.gitRepo.presentation.ui.viewmodel.RepoViewModel
+import com.hamid.data.utils.helper.MockApiResponse
 import com.hamid.data.utils.helper.MockResponseForPresentation
 import com.hamid.domain.model.model.Status
 import com.hamid.domain.model.usecases.GitRepoUseCase
-import com.nhaarman.mockitokotlin2.mock
-import com.nhaarman.mockitokotlin2.only
-import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.*
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.android.plugins.RxAndroidPlugins
 import io.reactivex.plugins.RxJavaPlugins
 import io.reactivex.schedulers.Schedulers
@@ -41,6 +41,10 @@ class ViewModelTest {
             gitRepoUseCase.getRepoFromDb()
         ).thenReturn(Flowable.just(MockResponseForPresentation.responseSuccess))
 
+        `when`(
+            gitRepoUseCase.getRepoFromServer()
+        ).thenReturn(Single.just(MockApiResponse.repoResponseList))
+
         viewModel = RepoViewModel(gitRepoUseCase)
 
     }
@@ -55,6 +59,65 @@ class ViewModelTest {
     fun getData_getDataFromDomainCalled() {
         viewModel.getData()
         verify(gitRepoUseCase, only()).getRepoFromDb()
+    }
+
+    @Test
+    fun getDataFromServer_callsMethods() {
+        viewModel.getDataFromServer()
+        verify(gitRepoUseCase, times(1)).insertRepoToDB(any())
+    }
+
+    @Test
+    fun getDataFromServer_returnsSuccessResponse() {
+        viewModel.getData()
+
+        viewModel.formattedList.observeForTesting {
+            assert(viewModel.formattedList.value!!.status == Status.SUCCESS)
+            assert(viewModel.formattedList.value!!.data.isNotEmpty())
+        }
+    }
+
+    @Test
+    fun getDataFromServer_returnsLoadingResponse() {
+
+        `when`(
+            gitRepoUseCase.getRepoFromDb()
+        ).thenReturn(Flowable.just(MockResponseForPresentation.responseLoading))
+
+        `when`(
+            gitRepoUseCase.getRepoFromServer()
+        ).thenReturn(Single.error(Exception()))
+
+        viewModel = RepoViewModel(gitRepoUseCase)
+
+        viewModel.getData()
+
+        viewModel.formattedList.observeForTesting {
+            assert(viewModel.formattedList.value!!.status == Status.LOADING)
+            assert(viewModel.formattedList.value!!.data.isEmpty())
+        }
+    }
+
+    @Test
+    fun getDataFromServer_returnsErrorResponse() {
+
+        `when`(
+            gitRepoUseCase.getRepoFromDb()
+        ).thenReturn(Flowable.just(MockResponseForPresentation.responseLoading))
+
+        `when`(
+            gitRepoUseCase.getRepoFromServer()
+        ).thenReturn(Single.error(Exception()))
+
+        viewModel = RepoViewModel(gitRepoUseCase)
+
+        viewModel.getData()
+        viewModel.getDataFromServer()
+
+        viewModel.formattedList.observeForTesting {
+            assert(viewModel.formattedList.value!!.status == Status.ERROR)
+            assert(viewModel.formattedList.value!!.data.isEmpty())
+        }
     }
 
     @Test
@@ -84,7 +147,7 @@ class ViewModelTest {
         viewModel.getData()
 
         viewModel.formattedList.observeForTesting {
-            Assert.assertTrue(viewModel.formattedList.value!!.status == Status.ERROR)
+            Assert.assertTrue(viewModel.formattedList.value!!.status == Status.LOADING)
         }
     }
 
